@@ -1,0 +1,104 @@
+---
+swagger: "2.0"
+info:
+  description: "精准医学API"
+  version: "1.0.0"
+  title: "Precision Medicine Web API"
+  termsOfService: "DUTIR"
+  license:
+    name: "DUTIR"
+    url: "http://ir.dlut.edu.cn"
+# host: "virtserver.swaggerhub.com"
+# basePath: "/JkunF_cs/precision_medicine/1.0.0"
+basePath: "/PMapi/"
+tags:
+- name: "NERandREL"
+  description: "命名实体识别及关系抽取模块"
+schemes:
+- "https"
+- "http"
+paths:
+  /NER_REL_GET:
+    get:
+      tags:
+      - "NERandREL"
+      summary: "实体识别和关系抽取的返回结果(Get方法)"
+      description: "Returns a list containing named entity recoginize and relation\
+        \ extraction result."
+      operationId: "ner_rel_get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "content"
+        in: "query"
+        description: "you can only input one sentence at one time"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "A list of all result"
+          schema:
+            $ref: "#/definitions/NerRelResult"
+        404:
+          description: "there is something wrong"
+      x-swagger-router-controller: "swagger_server.controllers.ne_rand_rel_controller"
+  /NER_REL_POST:
+    post:
+      tags:
+      - "NERandREL"
+      summary: "实体识别和关系抽取的返回结果(Post方法)"
+      description: "Returns a list containing named entity recoginize and relation\
+        \ extraction result."
+      operationId: "ner_rel_post"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "contents"
+        description: "one sentence at once"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "A list of all result"
+          schema:
+            $ref: "#/definitions/NerRelResult"
+        404:
+          description: "there is something wrong"
+      x-swagger-router-controller: "swagger_server.controllers.ne_rand_rel_controller"
+definitions:
+  Term:
+    type: "object"
+    properties:
+      input:
+        type: "string"
+      nerResult:
+        type: "string"
+      relationResult:
+        type: "string"
+    example:
+      input: "input"
+      relationResult: "relationResult"
+      nerResult: "nerResult"
+  NerRelResult:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/Term"
+    example:
+      code: 0
+      data:
+      - input: "input"
+        relationResult: "relationResult"
+        nerResult: "nerResult"
+      - input: "input"
+        relationResult: "relationResult"
+        nerResult: "nerResult"
